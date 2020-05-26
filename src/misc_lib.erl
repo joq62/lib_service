@@ -1,8 +1,7 @@
 %%% -------------------------------------------------------------------
-%%% Author  : uabjle
-%%% Description : dbase using dets 
+%%% @author : joqerlang
+%%% @doc : common support functions  
 %%%
-%%% Created : 10 dec 2012
 %%% -------------------------------------------------------------------
 -module(misc_lib).
   
@@ -14,16 +13,10 @@
 -include("common_macros.hrl").
 %% --------------------------------------------------------------------
 
-%% External exports
-%-export([unconsult/2,
-%	 get_node_by_id/1,get_vm_id/0,get_vm_id/1,
-%	 app_start/1
-%	]).
-	 
-
--export([unconsult/2,get_node_by_id/1,get_vm_id/0,get_vm_id/1,
+-export([unconsult/2,
+	 get_node_by_id/1,get_vm_id/0,get_vm_id/1,
 	 app_start/1,log_event/4]).
-%-compile(export_all).
+
 
 
 %% ====================================================================
@@ -33,8 +26,12 @@
 %% --------------------------------------------------------------------
 %% Function: 
 %% Description:
-%% Returns: non
+%% Returns: 
 %% --------------------------------------------------------------------
+
+%% @doc: log_event(Module,Line,Severity,Info) sends a log message to the
+%%       log_service 
+-spec(log_event(Module::module(),Line::line(),Severity::atom(),Info::string())->ok|{error,Err::string()}).
 log_event(Module,Line,Severity,Info)->
     SysLog=#syslog_info{date=date(),
 			time=time(),
@@ -56,33 +53,24 @@ log_event(Module,Line,Severity,Info)->
 	    tcp_client:call({IpAddr,Port},{log_service,store,[SysLog]})
     end.
 
-%% --------------------------------------------------------------------
-%% Function: 
-%% Description:
-%% Returns: non
-%% --------------------------------------------------------------------
 
-
-%% --------------------------------------------------------------------
-%% Function: 
-%% Description:
-%% Returns: non
-%% --------------------------------------------------------------------
-
-unconsult(File, L) ->
-    {ok, S} = file:open(File, write),
+%% @doc: unconsult(FileName,[term()] writes erlang terms to file FileName
+-spec(unconsult(FileName::string(),[term()])->ok).
+unconsult(FileName, L) ->
+    {ok, S} = file:open(FileName, write),
     lists:foreach(fun(X) -> io:format(S, "~p.~n",[X]) end, L),
     file:close(S).
 
-%% --------------------------------------------------------------------
-%% Function: 
-%% Description:
-%% Returns: non
-%% --------------------------------------------------------------------
+%% @doc: get_node_by_id(Id) returns erlang node based on Id Id@Host 
+
+-spec(get_node_by_id(Id::string())->Id@Host::atom()).
 get_node_by_id(Id)->
     {ok,Host}=inet:gethostname(),
     list_to_atom(Id++"@"++Host).
 
+%% @doc: log_event(Module,Line,Severity,Info) sends a log message to the
+%%       log_service 
+%%-spec(log_event(Module::module(),Line::line(),Severity::atom(),Info::string())->ok|{error,Err::string()}).
 get_vm_id()->
     get_vm_id(node()).
 get_vm_id(Node)->

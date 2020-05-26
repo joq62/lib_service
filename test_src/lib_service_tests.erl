@@ -27,6 +27,9 @@
 %% Description: List of test cases 
 %% Returns: non
 %% --------------------------------------------------------------------
+start()->
+    spawn(fun()->eunit:test({timeout,60,lib_service}) end).
+
 cases_test()->
     [clean_start(),
      eunit_start(),
@@ -45,8 +48,7 @@ cases_test()->
 %% Description: Initiate the eunit tests, set upp needed processes etc
 %% Returns: non
 %% --------------------------------------------------------------------
-start()->
-    spawn(fun()->eunit:test({timeout,60,lib_service}) end).
+
 
 
 

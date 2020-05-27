@@ -31,7 +31,7 @@
 
 %% @doc: log_event(Module,Line,Severity,Info) sends a log message to the
 %%       log_service 
--spec(log_event(Module::module(),Line::line(),Severity::atom(),Info::string())->ok|{error,Err::string()}).
+-spec(log_event(Module::module(),Line::line,Severity::atom(),Info::string())->ok|{error,Err::string()}).
 log_event(Module,Line,Severity,Info)->
     SysLog=#syslog_info{date=date(),
 			time=time(),

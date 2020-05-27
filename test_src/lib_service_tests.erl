@@ -31,16 +31,21 @@ start()->
     spawn(fun()->eunit:test({timeout,60,lib_service}) end).
 
 cases_test()->
-    [clean_start(),
-     eunit_start(),
-     % Add funtional test cases 
-%     misc_test:start(),
- %    pod_test:start(),
- %    tcp_test:start(),
-     mail_test:start(),
-     % cleanup and stop eunit 
-     clean_stop(),
-     eunit_stop()].
+    ?debugMsg("Test system setup"),
+    setup(),
+    %% Start application tests
+    ?debugMsg("container service"),    
+    ?assertEqual(ok,container_test:start()),
+    ?debugMsg("get call"),   
+ 
+    ?debugMsg("delete call"),   
+
+    ?debugMsg("clear call"),   
+
+    ?debugMsg("Start stop_test_system:start"),
+    %% End application tests
+    cleanup(),
+    ok.
 
 
 %% --------------------------------------------------------------------
@@ -48,45 +53,17 @@ cases_test()->
 %% Description: Initiate the eunit tests, set upp needed processes etc
 %% Returns: non
 %% --------------------------------------------------------------------
+setup()->
+    ?assertEqual(ok,application:start(lib_service)),
+    Node=node(),
+    ?assertEqual({pong,Node,lib_service},lib_service:ping()),    
+    ?assertEqual(ok,application:stop(lib_service)),  
+    ok.
+
+
+cleanup()->
+    init:stop().
 
 
 
-
-clean_start()->
-    file:delete("computer_1.config"),
-    pod:delete("pod_lib_1"),
-    pod:delete("pod_lib_2"),
-    pod:delete("pod_master").
-
-
-eunit_start()->
-    [start_service(lib_service),
-     check_started_service(lib_service)].
-
-
-
-clean_stop()->
-    pod:delete("pod_lib_1"),
-    pod:delete("pod_lib_2"),
-    pod:delete("pod_master").
-
-eunit_stop()->
-    stop_service(lib_service),
-    os:cmd("rm -rf lib_service"),
-    timer:sleep(1000),
-     init:stop().
-
-%% --------------------------------------------------------------------
-%% Function:support functions
-%% Description: Stop eunit tests, set upp needed processes etc
-%% Returns: non
-%% --------------------------------------------------------------------
-
-start_service(Service)->
-    ?assertEqual(ok,application:start(Service)).
-check_started_service(Service)->
-    ?assertMatch({pong,_,Service},Service:ping()).
-stop_service(Service)->
-    ?assertEqual(ok,application:stop(Service)),
-    ?assertEqual(ok,application:unload(Service)).
 

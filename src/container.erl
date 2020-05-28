@@ -10,13 +10,16 @@
 %% --------------------------------------------------------------------
 -include("common_macros.hrl").
 
+-include_lib("eunit/include/eunit.hrl").
 %% --------------------------------------------------------------------
 
 
 %% External exports
 
 -export([create/3,
-	 delete/1]).
+	 delete/1,
+	 clone/2
+	]).
 
 
 %% ====================================================================
@@ -69,9 +72,8 @@ delete_container(ServiceId)->
 %% PodId/Service
 %% --------------------------------------------------------------------
 create(ServiceId,Type,Source)->
-    R=create_container(ServiceId,Type,Source),
-    case [{error,Err}||{error,Err}<-R] of
-	[]->
+    case create_container(ServiceId,Type,Source) of
+	{ok,ServiceId}->
 	    ok;
 	Error->
 	    {error,Error}
@@ -106,15 +108,12 @@ create_container(ServiceId,Type,Source)->
 
 
 clone(ServiceId,Source)->
-    os:cmd("rm -rf include"),
-    IncludeUrl=filename:join(Source,"include")++".git",
-%    glurk=IncludeUrl,
-%    "https://github.com/joq62/include.git"=IncludeUrl,
-    []=os:cmd("git clone "++IncludeUrl),
-    
-    os:cmd("rm -rf "++"ServiceId"),
-    ServiceUrl=filename:join(Source,ServiceId)++".git",
-    []=os:cmd("git clone "++ServiceUrl),
+    application:stop(list_to_atom(ServiceId)),
+    application:unload(list_to_atom(ServiceId)),		     
+    os:cmd("rm -rf "++ServiceId),
+    ServiceIdGit=ServiceId++".git",
+    ServiceUrl=Source++ServiceIdGit,
+    os:cmd("git clone "++ServiceUrl),
     ok.
 
 %% --------------------------------------------------------------------

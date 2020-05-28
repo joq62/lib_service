@@ -36,12 +36,6 @@ cases_test()->
     %% Start application tests
     ?debugMsg("container service"),    
     ?assertEqual(ok,container_test:start()),
-    ?debugMsg("get call"),   
- 
-    ?debugMsg("delete call"),   
-
-    ?debugMsg("clear call"),   
-
     ?debugMsg("Start stop_test_system:start"),
     %% End application tests
     cleanup(),

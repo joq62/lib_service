@@ -10,31 +10,43 @@
 <hr>
 
 <h1>Module container</h1>
-<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>load - compile and start a service on calling node
+   -------------------------------------------------------------------.
 
+<p><b>Authors:</b> : joqerlang.</p>
 
+<h2><a name="description">Description</a></h2>load - compile and start a service on calling node
+   -------------------------------------------------------------------
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#clone-2">clone/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#create-3">create/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#delete-1">delete/1</a></td><td></td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#clone-2">clone/2</a></td><td> clone(ServiceId,Source)-&gt; ok
+        clones service  or directory ServiceId from git with Source url.</td></tr>
+<tr><td valign="top"><a href="#create-3">create/3</a></td><td> create(ServiceId,Type,Source)-&gt; ok | {error,Err::string()}
+        load- compiles and starts a service.</td></tr>
+<tr><td valign="top"><a href="#delete-1">delete/1</a></td><td> delete(ServiceId)-&gt;ok|{error,Err::string()}
+        stop - unload service and removes the directory.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
 
 <h3 class="function"><a name="clone-2">clone/2</a></h3>
 <div class="spec">
-<p><tt>clone(ServiceId, Source) -&gt; any()</tt></p>
-</div>
+<p><tt>clone(ServiceId::string(), Source::string()) -&gt; ok</tt><br></p>
+</div><p> clone(ServiceId,Source)-&gt; ok
+        clones service  or directory ServiceId from git with Source url</p>
 
 <h3 class="function"><a name="create-3">create/3</a></h3>
 <div class="spec">
-<p><tt>create(ServiceId, Type, Source) -&gt; any()</tt></p>
-</div>
+<p><tt>create(ServiceId::string(), Type::atom(), Source::string()) -&gt; ok | {error, Err::string()}</tt><br></p>
+</div><p> create(ServiceId,Type,Source)-&gt; ok | {error,Err::string()}
+        load- compiles and starts a service. Source can be git or local directory
+ </p>
 
 <h3 class="function"><a name="delete-1">delete/1</a></h3>
 <div class="spec">
-<p><tt>delete(ServiceId) -&gt; any()</tt></p>
-</div>
+<p><tt>delete(ServiceId::string()) -&gt; ok | {error, Err::string()}</tt><br></p>
+</div><p> delete(ServiceId)-&gt;ok|{error,Err::string()}
+        stop - unload service and removes the directory
+ </p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>

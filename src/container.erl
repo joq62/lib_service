@@ -1,8 +1,6 @@
 %%% -------------------------------------------------------------------
-%%% Author  : uabjle
-%%% Description : dbase using dets 
-%%%
-%%% Created : 10 dec 2012
+%%% @author  : joqerlang
+%%% @doc load - compile and start a service on calling node
 %%% -------------------------------------------------------------------
 -module(container). 
 %% --------------------------------------------------------------------
@@ -25,16 +23,11 @@
 %% ====================================================================
 %% External functions
 %% ====================================================================
-%% --------------------------------------------------------------------
-%% Function:init 
-%% Description:
-%% Returns: non
-%% --------------------------------------------------------------------
-%% --------------------------------------------------------------------
-%% Function:clone_compile(Service,BoardNode)
-%% Description:
-%% Returns: ok|{erro,compile_info}|{error,nodedown}
-%% --------------------------------------------------------------------
+
+%% @doc: delete(ServiceId)->ok|{error,Err::string()}
+%%       stop - unload service and removes the directory
+%%
+-spec(delete(ServiceId::string())->ok | {error,Err::string()}).
 delete(ServiceId)->
     delete_container(ServiceId).	
 
@@ -71,6 +64,10 @@ delete_container(ServiceId)->
 %%
 %% PodId/Service
 %% --------------------------------------------------------------------
+%% @doc: create(ServiceId,Type,Source)-> ok | {error,Err::string()}
+%%       load- compiles and starts a service. Source can be git or local directory
+%%
+-spec(create(ServiceId::string(),Type::atom(),Source::string())->ok | {error,Err::string()}).
 create(ServiceId,Type,Source)->
     case create_container(ServiceId,Type,Source) of
 	{ok,ServiceId}->
@@ -107,6 +104,9 @@ create_container(ServiceId,Type,Source)->
     Result.
 
 
+%% @doc: clone(ServiceId,Source)-> ok
+%%       clones service  or directory ServiceId from git with Source url
+-spec(clone(ServiceId::string(),Source::string())->ok).
 clone(ServiceId,Source)->
     application:stop(list_to_atom(ServiceId)),
     application:unload(list_to_atom(ServiceId)),		     

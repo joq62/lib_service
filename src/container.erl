@@ -77,6 +77,13 @@ create(ServiceId,Type,Source)->
     end.
     
 create_container(ServiceId,Type,Source)->
+    %Dirty include
+    case filelib:is_dir("include") of
+	false->
+	    os:cmd("git clone https://github.com/joq62/"++"include.git");
+	true->
+	    ok
+    end,
     Result =case filelib:is_dir(ServiceId) of
 		true->
 		    {error,[service_already_loaded,ServiceId,?MODULE,?LINE]};
